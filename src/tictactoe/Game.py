@@ -11,9 +11,9 @@ class Game:
             self.print_board()
             print("It's Player " + self.active_player + "'s turn.")
 
-            value = input("Choose a field.")
             taken = True
             while taken:
+                value = input("Choose a field.")
                 chosen = int(value)
                 if not self.is_taken(chosen):
                     taken = False
