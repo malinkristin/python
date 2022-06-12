@@ -1,5 +1,7 @@
 cat("Analysis of the Esoph dataset")
 analyse <- function() {
+  x <- nrow(esoph)
+  cat("\nAnzahl Daten in diesem Datensatz: ", x)
   cat("\nSummary of the data:\n")
   print(summary(esoph))
   
@@ -10,4 +12,3 @@ analyse <- function() {
 }
 
 analyse()
-hist(esoph$ncases, xlab="Cases")
