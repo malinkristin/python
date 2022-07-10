@@ -6,21 +6,16 @@ env = gym.make("FrozenLake-v1")
 observation = env.reset()
 
 state_table = np.zeros((16, 4))
-train_episodes = 20000
-alpha = 0.8
-gamma = 0.9
-
-LEFT = 0
-DOWN = 1
-RIGHT = 2
-UP = 3
+train_episodes = 100
+alpha = 0.5
+gamma = 1
 
 # Training
 for _ in range(train_episodes):
     state = env.reset()
-    success = False
+    done = False
 
-    while not success:
+    while not done:
         # uncomment to watch the agent move on the board as it trains (will take much longer)
         # env.render()
 
@@ -28,17 +23,19 @@ for _ in range(train_episodes):
         # action with the highest value will be taken here
         if np.max(state_table[state]) > 0:
             action = np.argmax(state_table[state])
-
         # if all action values are 0, a random action will be taken
         else:
             action = env.action_space.sample()
 
         # take the action and move into that direction
-        new_state, success, reward, info = env.step(action)
+        new_state, reward, done, info = env.step(action)
         # take the new_state and update the table with the taken action and possible reward
+        reward_int = 0
+        if reward:
+            reward_int = 1
 
         state_table[state, action] = state_table[state, action] + \
-                                alpha * (reward + gamma * np.max(state_table[new_state]) - state_table[state, action])
+                                alpha * (reward_int + gamma * np.max(state_table[new_state]) - state_table[state, action])
 
         # update to the next state
         state = new_state
@@ -56,7 +53,7 @@ for _ in range(test_episodes):
 
     # Until the agent gets stuck or reaches the goal, keep training it
     while not done:
-        env.render()
+        # env.render()
 
         if np.max(state_table[state]) > 0:
             action = np.argmax(state_table[state])
